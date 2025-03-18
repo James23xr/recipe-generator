@@ -1,0 +1,321 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Saved Recipes - Recipe Generator</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        :root {
+            --primary-color: #4e9f3d;
+            --secondary-color: #f8b400;
+            --dark-color: #1e5128;
+            --light-color: #f8f9fa;
+            --accent-color: #ff6b6b;
+        }
+        
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background-color: #f5f7f9;
+            color: #333;
+        }
+        
+        .navbar {
+            background-color: var(--dark-color);
+        }
+        
+        .navbar-brand {
+            font-weight: 700;
+            color: white !important;
+        }
+        
+        .navbar-brand i {
+            color: var(--secondary-color);
+            margin-right: 8px;
+        }
+        
+        .page-header {
+            background-color: var(--primary-color);
+            color: white;
+            padding: 2rem 0;
+            margin-bottom: 2rem;
+            box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+        }
+        
+        .card {
+            border: none;
+            border-radius: 10px;
+            box-shadow: 0 4px 6px rgba(0,0,0,0.05);
+            transition: transform 0.3s ease;
+            margin-bottom: 1.5rem;
+        }
+        
+        .card:hover {
+            transform: translateY(-5px);
+        }
+        
+        .card-title {
+            color: var(--dark-color);
+            font-weight: 600;
+        }
+        
+        .recipe-card {
+            border-left: 5px solid var(--secondary-color);
+        }
+        
+        footer {
+            background-color: var(--dark-color);
+            color: white;
+            padding: 1.5rem 0;
+            margin-top: 3rem;
+        }
+        
+        .recipe-date {
+            color: #6c757d;
+            font-size: 0.9rem;
+        }
+        
+        .recipe-preview {
+            max-height: 200px;
+            overflow: hidden;
+            position: relative;
+        }
+        
+        .recipe-preview::after {
+            content: '';
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            width: 100%;
+            height: 50px;
+            background: linear-gradient(transparent, #fff);
+        }
+        
+        .btn-view {
+            background-color: var(--primary-color);
+            border-color: var(--primary-color);
+            color: white;
+        }
+        
+        .btn-view:hover {
+            background-color: var(--dark-color);
+            border-color: var(--dark-color);
+            color: white;
+        }
+        
+        .no-recipes {
+            text-align: center;
+            padding: 3rem;
+            background-color: #f8f9fa;
+            border-radius: 10px;
+        }
+    </style>
+</head>
+<body>
+    <!-- Navigation -->
+    <nav class="navbar navbar-expand-lg navbar-dark">
+        <div class="container">
+            <a class="navbar-brand" href="/"><i class="fas fa-utensils"></i>Recipe Generator</a>
+            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+            <div class="collapse navbar-collapse" id="navbarNav">
+                <ul class="navbar-nav ms-auto">
+                    <li class="nav-item">
+                        <a class="nav-link" href="/">Home</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link active" href="/saved-recipes">Saved Recipes</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="#">About</a>
+                    </li>
+                </ul>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Header -->
+    <header class="page-header">
+        <div class="container">
+            <div class="row justify-content-center">
+                <div class="col-md-8 text-center">
+                    <h1 class="display-4">Saved Recipes</h1>
+                    <p class="lead">Your collection of favorite recipes</p>
+                </div>
+            </div>
+        </div>
+    </header>
+
+    <!-- Main Content -->
+    <div class="container">
+        <div class="row" id="recipesContainer">
+            <!-- Recipes will be loaded here -->
+            <div class="col-12 no-recipes d-none" id="noRecipesMessage">
+                <div class="py-5 text-center">
+                    <i class="fas fa-book fa-4x mb-3 text-muted"></i>
+                    <h3>No Saved Recipes Yet</h3>
+                    <p class="text-muted">Generate and save recipes to build your collection</p>
+                    <a href="/" class="btn btn-primary mt-3">
+                        <i class="fas fa-utensils me-2"></i>Generate Recipes
+                    </a>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Footer -->
+    <footer>
+        <div class="container">
+            <div class="row">
+                <div class="col-md-6">
+                    <h5><i class="fas fa-utensils me-2"></i>Recipe Generator</h5>
+                    <p>Turn your available ingredients into delicious meals with the help of AI.</p>
+                </div>
+                <div class="col-md-3">
+                    <h5>Links</h5>
+                    <ul class="list-unstyled">
+                        <li><a href="/" class="text-white">Home</a></li>
+                        <li><a href="#" class="text-white">About</a></li>
+                        <li><a href="#" class="text-white">Contact</a></li>
+                    </ul>
+                </div>
+                <div class="col-md-3">
+                    <h5>Connect</h5>
+                    <div class="d-flex gap-3 fs-4">
+                        <a href="#" class="text-white"><i class="fab fa-facebook"></i></a>
+                        <a href="#" class="text-white"><i class="fab fa-twitter"></i></a>
+                        <a href="#" class="text-white"><i class="fab fa-instagram"></i></a>
+                    </div>
+                </div>
+            </div>
+            <hr class="mt-4 mb-3 border-light">
+            <div class="text-center">
+                <p class="mb-0">&copy; 2025 Recipe Generator. All rights reserved.</p>
+            </div>
+        </div>
+    </footer>
+
+    <!-- Recipe Modal -->
+    <div class="modal fade" id="recipeModal" tabindex="-1" aria-labelledby="recipeModalLabel" aria-hidden="true">
+        <div class="modal-dialog modal-lg">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="recipeModalLabel">Recipe Details</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                    <h4 id="modalRecipeTitle"></h4>
+                    <div class="mt-4">
+                        <h5 class="text-primary"><i class="fas fa-shopping-basket me-2"></i>Ingredients:</h5>
+                        <ul id="modalRecipeIngredients" class="list-group list-group-flush"></ul>
+                    </div>
+                    <div class="mt-4">
+                        <h5 class="text-primary"><i class="fas fa-list-ol me-2"></i>Instructions:</h5>
+                        <ol id="modalRecipeInstructions" class="ps-3"></ol>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                    <button type="button" class="btn btn-primary" id="printModalRecipe">
+                        <i class="fas fa-print me-1"></i> Print
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            const recipesContainer = document.getElementById('recipesContainer');
+            const noRecipesMessage = document.getElementById('noRecipesMessage');
+            
+            // Load saved recipes
+            async function loadSavedRecipes() {
+                try {
+                    const response = await fetch('/api/saved-recipes');
+                    const data = await response.json();
+                    
+                    if (data.success && data.recipes.length > 0) {
+                        renderRecipes(data.recipes);
+                    } else {
+                        noRecipesMessage.classList.remove('d-none');
+                    }
+                } catch (error) {
+                    console.error('Error loading saved recipes:', error);
+                    noRecipesMessage.classList.remove('d-none');
+                }
+            }
+            
+            // Render recipes
+            function renderRecipes(recipes) {
+                recipesContainer.innerHTML = '';
+                
+                recipes.forEach(recipe => {
+                    const date = new Date(recipe.saved_at).toLocaleDateString();
+                    const ingredientsList = recipe.ingredients.slice(0, 3).join(', ') + 
+                        (recipe.ingredients.length > 3 ? '...' : '');
+                    
+                    const recipeCard = document.createElement('div');
+                    recipeCard.className = 'col-md-6 col-lg-4 mb-4';
+                    recipeCard.innerHTML = `
+                        <div class="card h-100 recipe-card">
+                            <div class="card-body">
+                                <h5 class="card-title">${recipe.title}</h5>
+                                <p class="recipe-date"><i class="far fa-calendar-alt me-1"></i> Saved on ${date}</p>
+                                <div class="recipe-preview">
+                                    <p><strong>Ingredients:</strong> ${ingredientsList}</p>
+                                    <p><strong>Instructions:</strong> ${recipe.instructions[0].substring(0, 100)}...</p>
+                                </div>
+                            </div>
+                            <div class="card-footer bg-white border-0 pt-0">
+                                <button class="btn btn-view w-100 view-recipe" data-recipe-id="${recipe.id}">
+                                    <i class="fas fa-eye me-1"></i> View Recipe
+                                </button>
+                            </div>
+                        </div>
+                    `;
+                    
+                    recipesContainer.appendChild(recipeCard);
+                });
+                
+                // Add event listeners to view recipe buttons
+                document.querySelectorAll('.view-recipe').forEach(button => {
+                    button.addEventListener('click', () => {
+                        const recipeId = button.getAttribute('data-recipe-id');
+                        openRecipeModal(recipes.find(r => r.id == recipeId));
+                    });
+                });
+            }
+            
+            // Open recipe modal
+            function openRecipeModal(recipe) {
+                document.getElementById('modalRecipeTitle').textContent = recipe.title;
+                
+                const ingredientsList = document.getElementById('modalRecipeIngredients');
+                ingredientsList.innerHTML = recipe.ingredients
+                    .map(ing => `<li class="list-group-item"><i class="fas fa-check-circle text-success me-2"></i>${ing}</li>`)
+                    .join('');
+                
+                const instructionsList = document.getElementById('modalRecipeInstructions');
+                instructionsList.innerHTML = recipe.instructions
+                    .map(step => `<li class="mb-3">${step}</li>`)
+                    .join('');
+                
+                const modal = new bootstrap.Modal(document.getElementById('recipeModal'));
+                modal.show();
+            }
+            
+            // Print recipe from modal
+            document.getElementById('printModalRecipe').addEventListener('click', () => {
+                window.print();
+            });
+            
+            // Load recipes on page load
+            loadSavedRecipes();
+        });
+    </script>
+</body>
+</html>
